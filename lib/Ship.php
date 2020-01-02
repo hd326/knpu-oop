@@ -1,5 +1,7 @@
 <?php
-
+// Class Reasons
+// 1) Hold data
+// 2) Do work
 class Ship
 {
     private $name;
