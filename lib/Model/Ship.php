@@ -4,6 +4,7 @@
 // 2) Do work
 class Ship
 {
+    private $id;
     private $name;
     private $weaponPower = 0;
     private $jediFactor = 0;
@@ -96,4 +97,13 @@ class Ship
         return $this->weaponPower;
     }
 
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
 }

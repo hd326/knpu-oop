@@ -36,6 +36,10 @@ public function battle(Ship $ship1, $ship1Quantity, Ship $ship2, $ship2Quantity)
         $ship2Health = $ship2Health - ($ship1->getWeaponPower() * $ship1Quantity);
     }
 
+    $ship1->setStrength($ship1Health);
+    $ship2->setStrength($ship2Health);
+    //var_dump($ship1->getStrength(), $ship2->getStrength()); die;
+
     if ($ship1Health <= 0 && $ship2Health <= 0) {
         // they destroyed each other
         $winningShip = null;
