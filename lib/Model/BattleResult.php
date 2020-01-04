@@ -1,6 +1,8 @@
 <?php
 
-class BattleResult
+namespace Model;
+
+class BattleResult implements \ArrayAccess
 {
     private $usedJediPowers;
     private $winningShip;

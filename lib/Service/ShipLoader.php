@@ -1,23 +1,45 @@
 <?php
 
+namespace Service;
+
+use Model\RebelShip;
+use Model\Ship;
+use Model\AbstractShip;
+use Model\BountyHunterShip;
+use Model\ShipCollection;
+// Whenever reference class, dont forget to put use statement
+
+
 class ShipLoader
 {
-    private $pdo;
+    private $shipStorage;
 
-    public function __construct(PDO $pdo)
+    public function __construct(ShipStorageInterface $shipStorage)
     {
-        $this->pdo = $pdo;
+        $this->shipStorage = $shipStorage;
     }
+    // We don't care what class is passed here, as long as it has two methods
+    // Stored in ShipStorageInterface
 
     public function getShips()
     {
+        // throw new \InvalidArgumentException('Something else went wrong');
+        // All exceptions are objects
+        // All exception classes extend base \Exception class
+        try {
+            $shipsData = $this->shipStorage->fetchAllShipsData();
+        } catch (\PDOException $e) {
+            trigger_error('Databse Exception! '.$e->getMessage());
+            $shipsData = [];
+        }
         
-        $shipsData = $this->queryForShips();
-
+        $ships = array();
         foreach($shipsData as $shipData) {
             $ships[] = $this->createShipFromData($shipData);
         }
         
+        $ships[] = new BountyHunterShip('Slave I');
+
         //$ships = array();
         //
         //$ship = new Ship('Jedi Starfighter');
@@ -82,14 +104,14 @@ class ShipLoader
 
     public function findOneById($id)
     {
-        $pdo = $this->getPDO();
-        $statement= $pdo->prepare('SELECT * FROM ship WHERE id = :id');
-        $statement->execute(array('id' => $id));
-        $shipArray = $statement->fetch(PDO::FETCH_ASSOC);
-
-        if(!$shipArray) {
-            return null;
-        }
+        $shipArray = $this->shipStorage->fetchSingleShipData($id);
+        //$pdo = $this->getPDO();
+        //$statement= $pdo->prepare('SELECT * FROM ship WHERE id = :id');
+        //$statement->execute(array('id' => $id));
+        //$shipArray = $statement->fetch(PDO::FETCH_ASSOC);
+        //if(!$shipArray) {
+        //    return null;
+        //}
 
         return $this->createShipFromData($shipArray);
     }
@@ -110,21 +132,21 @@ class ShipLoader
         return $ship;
     }
 
-    private function queryForShips()
-    {
-        $pdo = $this->getPDO();
-        $statement= $pdo->prepare('SELECT * FROM ship');
-        $statement->execute();
-        $shipsArray = $statement->fetchAll(PDO::FETCH_ASSOC);
-        return $shipsArray;
-    }
+    //private function queryForShips()
+    //{
+    //    $pdo = $this->getPDO();
+    //    $statement= $pdo->prepare('SELECT * FROM ship');
+    //    $statement->execute();
+    //    $shipsArray = $statement->fetchAll(PDO::FETCH_ASSOC);
+    //    return $shipsArray;
+    //}
     // This is a service class, does work for us, and has a property
     // Used to store options about how a class should work
     // Or useful objects that the class needs
-    private function getPDO()
-    {
-        return $this->pdo;
-    }
+    //private function getPDO()
+    //{
+    //    return $this->pdo;
+    //}
     // If a service class like ShipLoader needs information, like a database password
     // We need to pass that information to ShipLoader, instead of expecting it to use a global keyword
     // Or some other method to find it on it's own

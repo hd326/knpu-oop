@@ -1,6 +1,9 @@
 <?php
 require __DIR__.'/bootstrap.php';
 
+use Service\Container;
+
+
 $container = new Container($configuration);
 
 //$pdo = $container->getPDO();
@@ -33,10 +36,11 @@ if ($ship1Quantity <= 0 || $ship2Quantity <= 0) {
     die;
 }
 
+$battleType = $_POST['battle_type'];
 
 $battleManager = $container->getBattleManager();
 
-$battleResult = $battleManager->battle($ship1, $ship1Quantity, $ship2, $ship2Quantity);
+$battleResult = $battleManager->battle($ship1, $ship1Quantity, $ship2, $ship2Quantity, $battleType);
 ?>
 
 <html>

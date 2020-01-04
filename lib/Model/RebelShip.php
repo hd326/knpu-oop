@@ -1,5 +1,7 @@
 <?php
 
+namespace Model;
+
 class RebelShip extends AbstractShip
 {
     // Inherits all stuff inside parent class

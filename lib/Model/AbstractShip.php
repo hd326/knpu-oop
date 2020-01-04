@@ -1,10 +1,19 @@
 <?php
 
+namespace Model;
+
 abstract class AbstractShip
 // Once class has an abstract function, need to add abstract to it
 // Enforces rule that you cannot say new AbstractShip
+
+// Class is like a blueprint
+// Object is an actual Ship
 {
         // Protected works the same as private, except subclasses can access it
+        // Private static makes it so the it is enforced / the same everywhere
+        // For example, minimum strength, and use it prevent individual ships from 
+        // declaring their own
+        // $this refers to the current object, self refers to the class were inside of
         private $id;
         private $name;
         private $weaponPower = 0;
@@ -68,8 +77,9 @@ abstract class AbstractShip
         public function setStrength($strength)
         {
             if(!is_numeric($strength)) {
-                throw new Exception('Invalid strength passed '.$strength);
+                throw new \Exception('Invalid strength passed '.$strength);
             }
+
             $this->strength = $strength;
         }
     
@@ -102,4 +112,16 @@ abstract class AbstractShip
         {
             return 'Ra1nb0ws';
         }
+
+        public function __toString()
+        {
+            // __ magic methods
+            return $this->getName();
+        }
+
+        //public function __get($propertyName)
+        //{
+        //    //var_dump($propertyName);die;
+        //    return $this->$propertyName;
+        //}
 }

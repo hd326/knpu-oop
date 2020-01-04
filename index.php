@@ -1,16 +1,25 @@
 <?php
 require __DIR__.'/bootstrap.php';
 
-$container = new Container($configuration);
+use Service\BattleManager;
+use Service\Container;
+use Model\BrokenShip;
 
+$container = new Container($configuration);
 //$pdo = $container->getPDO();
 //$shipLoader = new ShipLoader($pdo);
 $shipLoader = $container->getShipLoader(); 
 
 $ships = $shipLoader->getShips();
+$brokenShip = new BrokenShip('I am so broken');
+$ships[] = $brokenShip;
 
-$rebelShip = new RebelShip('My new rebel ship');
-$ships[] = $rebelShip;
+$battleTypes = BattleManager::getAllBattleTypesWithDescription();
+
+//$rebelShip = new RebelShip('My new rebel ship');
+//$ships[] = $rebelShip;
+// Methods that are not static need to be called upon by and Object
+
 
 $errorMessage = '';
 if (isset($_GET['error'])) {
@@ -118,6 +127,15 @@ if (isset($_GET['error'])) {
                                 <?php endif; ?>
                             <?php endforeach; ?>
                         </select>
+                        <br>
+                        <div class="text-center">
+                            <label for="battle_type">Battle Type</label>
+                            <select name="battle_type" id="battle_type" class="form-control">
+                            <?php foreach($battleTypes as $battleType => $typeText): ?>
+                                <option value="<?php echo $battleType; ?>"><?php echo $typeText ?></option>
+                            <?php endforeach; ?>  
+                            </select>        
+                        </div>
                         <br>
                         <button class="btn btn-md btn-danger center-block" type="submit">Engage</button>
                     </form>
